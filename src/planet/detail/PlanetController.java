@@ -1,11 +1,5 @@
 package planet.detail;
 
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,9 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
-
-import javax.imageio.ImageIO;
 
 public class PlanetController {
 
@@ -52,33 +43,14 @@ public class PlanetController {
     }
 
     // Image path as text
-    private String imgPath;
+    private String imagePath;
 
     @FXML
     void showImage(ActionEvent event) {
-        this.imgPath = chooseImage();
-        loadImage(this.imgPath);
-    }
-
-    String chooseImage() {
-        FileChooser imgChooser = new FileChooser();
-        String imgPath = Paths.get(".\\images").toAbsolutePath().normalize().toString();
-        imgChooser.setInitialDirectory(new File(imgPath));
-        File selectedImg = imgChooser.showOpenDialog(null);
-
-        return selectedImg.getPath();
-    }
-
-    void loadImage(String pathOfImageToLoad) {
-        BufferedImage imgBuffer;
-        try {
-            imgBuffer = ImageIO.read(new File(pathOfImageToLoad));
-            Image img = SwingFXUtils.toFXImage(imgBuffer, null);
-            this.planetImage.setImage(img);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Cannot find path: " + pathOfImageToLoad);
-        }
+        this.imagePath = ImageLoader.chooseImageFromChooser();
+        Image imageToShow = ImageLoader.getImageFromPath(this.imagePath);
+        if(imageToShow != null)
+            this.planetImage.setImage(imageToShow);
     }
 
     @FXML
@@ -96,7 +68,7 @@ public class PlanetController {
         if(hasValidPlanetContent(name, diameter, surfaceTemp, numberOfMoons))
         {
             PlanetFactory planetCreator = new PlanetFactory();
-            Planet createdPlanet = planetCreator.createPlanet(name, diameter, surfaceTemp, numberOfMoons, this.imgPath);
+            Planet createdPlanet = planetCreator.createPlanet(name, diameter, surfaceTemp, numberOfMoons, this.imagePath);
             System.out.println(createdPlanet.toString());
         }
     }
