@@ -1,6 +1,11 @@
 package planet.detail;
 
-public class Planet {
+import java.io.Serializable;
+
+public class Planet implements Serializable {
+
+    // serialVersion ID
+    //private static final long serialVersionUID = 1L;
 
     private String name;  // Must contain only [A-z0-9\s-.] with length 1-255.
     private int diameterKM;   // Real number 0 to 200,000, defaults to -1
