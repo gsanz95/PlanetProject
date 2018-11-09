@@ -32,7 +32,7 @@
                   <HBox minWidth="-Infinity" prefHeight="100.0">
                      <children>
                         <Label text="Planet Name" />
-                        <TextField fx:id="name" text="">
+                        <TextField fx:id="planetName" text="">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>
@@ -42,7 +42,7 @@
                   <HBox minWidth="-Infinity" prefHeight="100.0">
                      <children>
                         <Label text="Planet Diameter (km)" />
-                        <TextField fx:id="diameterKM" text="">
+                        <TextField fx:id="planetDiameterKM" text="">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>
@@ -62,7 +62,7 @@
                   <HBox prefHeight="100.0">
                      <children>
                         <Label maxWidth="-Infinity" minWidth="-Infinity" text="Planet Mean Surface Temp. (C)" />
-                        <TextField fx:id="meanSurfaceTempC" text="">
+                        <TextField fx:id="planetMeanSurfaceTempC" text="">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>
@@ -82,7 +82,7 @@
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Label text="# of Moons" />
-                        <TextField fx:id="numberOfMoons" text="">
+                        <TextField fx:id="planetNumberOfMoons" text="">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>

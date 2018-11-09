@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
@@ -14,15 +15,14 @@ import planet.detail.PlanetController;
 public class AppMain extends Application {
 	public AppMain() {
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 	//FXML startup method
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
 		PlanetController controller = new PlanetController();
 
 		FXMLLoader loader = new FXMLLoader(controller.getClass().getResource("PlanetView.fxml"));

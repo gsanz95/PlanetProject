@@ -1,5 +1,9 @@
 package planet.detail;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -38,12 +42,14 @@ public class PlanetController {
     private Label fancyPlanetName;
 
     @FXML
-    public void initialize() {
-        //this.planetName.textProperty().addListener((observable, oldValue, newValue) -> this.fancyPlanetName.setText(newValue));
-    }
-
-    // Image path as text
     private String imagePath;
+
+    @FXML
+    public void initialize() {
+        this.fancyPlanetName.textProperty().bind(this.planetName.textProperty());
+        if(this.fancyPlanetName == null)
+            System.out.println("Label is null");
+    }
 
     @FXML
     void showImage(ActionEvent event) {
