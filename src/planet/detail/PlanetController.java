@@ -61,12 +61,13 @@ public class PlanetController {
 
     @FXML
     void loadPlanet(ActionEvent event) {
-
+        PlanetIO planetReader = new PlanetIO();
+        Planet planetToLoad = planetReader.choosePlanetFromChooser();
+        System.err.println(planetToLoad.toString());
     }
     
     @FXML
     void savePlanet(ActionEvent event) {
-        System.out.println("Trying to save:" + this.planetName.getText());
         String name = this.planetName.getText();
         int diameter = Integer.parseInt(this.planetDiameterKM.getText());
         double surfaceTemp = Double.parseDouble(this.planetMeanSurfaceTempC.getText());
@@ -77,7 +78,7 @@ public class PlanetController {
             PlanetFactory planetCreator = new PlanetFactory();
             Planet createdPlanet = planetCreator.createPlanet(name, diameter, surfaceTemp, numberOfMoons, this.imagePath);
 
-            PlanetIO planetWriter = new PlanetIO(createdPlanet.getName());
+            PlanetIO planetWriter = new PlanetIO();
             planetWriter.WriteToFile(createdPlanet);
 
         }

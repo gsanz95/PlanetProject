@@ -1,26 +1,55 @@
 package planet.detail;
 
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import javafx.stage.FileChooser;
+
+import java.io.*;
 import java.nio.file.Paths;
 
+/*
+    Delegate to handle all IO interactions for planets
+ */
 public class PlanetIO {
 
     private String savePath;
 
-    public PlanetIO(String planetName) {
-        this.savePath = Paths.get(".\\planetObjects").toAbsolutePath().normalize().toString() + "\\" + planetName;
+    public PlanetIO() {
+        this.savePath = Paths.get(".\\planetObjects").toAbsolutePath().normalize().toString();
     }
 
     public void WriteToFile(Planet planetToWrite) {
-        System.out.println("Trying to save:" + planetToWrite.getName());
+        String fileDestination = this.savePath + "\\" + planetToWrite.getName();
         try{
-            FileOutputStream fileOutStream = new FileOutputStream(this.savePath);
+            FileOutputStream fileOutStream = new FileOutputStream(fileDestination);
             ObjectOutputStream objectOutStream = new ObjectOutputStream(fileOutStream);
             objectOutStream.writeObject(planetToWrite);
             objectOutStream.close();
         }catch (Exception e){
             e.getMessage();
+        }
+    }
+
+    public Planet choosePlanetFromChooser() {
+        FileChooser planetChooser = new FileChooser();
+        String planetPath = this.savePath;
+        planetChooser.setInitialDirectory(new File(planetPath));
+        File planetFile  = planetChooser.showOpenDialog(null);
+
+        return this.ReadFromFile(planetFile.getPath());
+    }
+
+    public Planet ReadFromFile(String fileLocation) {
+        System.err.println(fileLocation);
+        try{
+            FileInputStream inStream = new FileInputStream(fileLocation);
+            ObjectInputStream planetInStream = new ObjectInputStream(inStream);
+
+            Planet readPlanet = (Planet) planetInStream.readObject();
+
+            planetInStream.close();
+            return readPlanet;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 }
