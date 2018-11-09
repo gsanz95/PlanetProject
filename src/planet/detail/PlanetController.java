@@ -47,25 +47,40 @@ public class PlanetController {
     @FXML
     public void initialize() {
         this.fancyPlanetName.textProperty().bind(this.planetName.textProperty());
-        if(this.fancyPlanetName == null)
-            System.out.println("Label is null");
     }
 
     @FXML
     void showImage(ActionEvent event) {
         this.imagePath = ImageLoader.chooseImageFromChooser();
         Image imageToShow = ImageLoader.getImageFromPath(this.imagePath);
-        if(imageToShow != null)
-            this.planetImage.setImage(imageToShow);
+        setImage(imageToShow);
+    }
+
+    void setImage(Image imageToSet) {
+        if(imageToSet != null)
+            this.planetImage.setImage(imageToSet);
     }
 
     @FXML
     void loadPlanet(ActionEvent event) {
         PlanetIO planetReader = new PlanetIO();
         Planet planetToLoad = planetReader.choosePlanetFromChooser();
-        System.err.println(planetToLoad.toString());
+        //System.err.println(planetToLoad.toString());
+        displayPlanetOnView(planetToLoad);
+
     }
-    
+
+    void displayPlanetOnView(Planet planetToDisplay) {
+        Image imageToLoad = ImageLoader.getImageFromPath(planetToDisplay.getImagePath());
+        setImage(imageToLoad);
+        this.planetName.setText(planetToDisplay.getName());
+        this.planetDiameterKM.setText(Integer.toString(planetToDisplay.getDiameterKM()));
+        this.planetDiameterM.setText(Double.toString(planetToDisplay.getDiameterM()));
+        this.planetMeanSurfaceTempC.setText(Double.toString(planetToDisplay.getMeanSurfaceTempC()));
+        this.planetMeanSurfaceTempF.setText(Double.toString(planetToDisplay.getMeanSurfaceTempF()));
+        this.planetNumberOfMoons.setText(Integer.toString(planetToDisplay.getNumberOfMoons()));
+    }
+
     @FXML
     void savePlanet(ActionEvent event) {
         String name = this.planetName.getText();

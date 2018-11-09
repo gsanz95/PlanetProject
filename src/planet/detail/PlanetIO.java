@@ -38,7 +38,7 @@ public class PlanetIO {
     }
 
     public Planet ReadFromFile(String fileLocation) {
-        System.err.println(fileLocation);
+        //System.err.println(fileLocation);
         try{
             FileInputStream inStream = new FileInputStream(fileLocation);
             ObjectInputStream planetInStream = new ObjectInputStream(inStream);
