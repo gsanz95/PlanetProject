@@ -1,14 +1,8 @@
 package planet.detail;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -42,20 +36,53 @@ public class PlanetController {
     private Label fancyPlanetName;
 
     @FXML
-    private String imagePath;
+    private String imageName;
 
     @FXML
     public void initialize() {
+        connectNameToLabel();
+        connectDiameterTextFields();
+        connectTemperatureTextFields();
+        this.imageName = "";
+    }
+
+    /**
+     * Binds fancyPlanetName text to planetName text
+     */
+    void connectNameToLabel() {
         this.fancyPlanetName.textProperty().bind(this.planetName.textProperty());
+    }
+
+    /**
+     * Adds a change listener to planetDiameterKM and updates
+     * planetDiameterM each time it is updated
+     */
+    void connectDiameterTextFields() {
+        DiameterListener milesListener = new DiameterListener(this.planetDiameterM);
+        this.planetDiameterKM.textProperty().addListener(milesListener);
+    }
+
+    /**
+     * Adds a change listener to planetMeanSurfaceTempC and updates
+     * planetMeanSurfaceTempF each time it is updated
+     */
+    void connectTemperatureTextFields() {
+        TemperatureListener celsiusListener = new TemperatureListener(this.planetMeanSurfaceTempF);
+        this.planetMeanSurfaceTempC.textProperty().addListener(celsiusListener);
     }
 
     @FXML
     void showImage(ActionEvent event) {
-        this.imagePath = ImageLoader.chooseImageFromChooser();
-        Image imageToShow = ImageLoader.getImageFromPath(this.imagePath);
+        this.imageName = ImageLoader.chooseImageFromChooser();
+        Image imageToShow = ImageLoader.getImageFromName(this.imageName);
         setImage(imageToShow);
     }
 
+    /**
+     * Takes an image and displays it on the scene
+     *
+     * @param imageToSet Image object to display in the scene
+     */
     void setImage(Image imageToSet) {
         if(imageToSet != null)
             this.planetImage.setImage(imageToSet);
@@ -65,13 +92,19 @@ public class PlanetController {
     void loadPlanet(ActionEvent event) {
         PlanetIO planetReader = new PlanetIO();
         Planet planetToLoad = planetReader.choosePlanetFromChooser();
-        //System.err.println(planetToLoad.toString());
         displayPlanetOnView(planetToLoad);
-
     }
 
+    /**
+     * Takes a planet object and updates all text in the scene
+     * with the fields from the object.
+     *
+     * @param planetToDisplay Planet containing all relevant info to display
+     */
     void displayPlanetOnView(Planet planetToDisplay) {
-        Image imageToLoad = ImageLoader.getImageFromPath(planetToDisplay.getImagePath());
+        if(!isOverwritingDisplayedInfo())
+            return;
+        Image imageToLoad = ImageLoader.getImageFromName(planetToDisplay.getImageName());
         setImage(imageToLoad);
         this.planetName.setText(planetToDisplay.getName());
         this.planetDiameterKM.setText(Integer.toString(planetToDisplay.getDiameterKM()));
@@ -81,6 +114,28 @@ public class PlanetController {
         this.planetNumberOfMoons.setText(Integer.toString(planetToDisplay.getNumberOfMoons()));
     }
 
+    /**
+     * Creates an alert and makes the user confirm whether
+     * they want to overwrite the info on the screen or not.
+     * @return User's answer to the prompt.
+     */
+    boolean isOverwritingDisplayedInfo() {
+        Alert confirmationBox = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationBox.setTitle("Overwrite Fields");
+        confirmationBox.setContentText("Overwrite the current fields?");
+        ButtonType buttonChoice = confirmationBox.showAndWait().get();
+        if(buttonChoice == ButtonType.OK)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Once the event is triggered and takes all the input fields
+     * and converts them to their appropriate types, uses the
+     * converted information to create a planet object in a
+     * factory.
+     */
     @FXML
     void savePlanet(ActionEvent event) {
         String name = this.planetName.getText();
@@ -88,19 +143,12 @@ public class PlanetController {
         double surfaceTemp = Double.parseDouble(this.planetMeanSurfaceTempC.getText());
         int numberOfMoons = Integer.parseInt(this.planetNumberOfMoons.getText());
 
-        if(hasValidPlanetContent(name, diameter, surfaceTemp, numberOfMoons))
-        {
-            PlanetFactory planetCreator = new PlanetFactory();
-            Planet createdPlanet = planetCreator.createPlanet(name, diameter, surfaceTemp, numberOfMoons, this.imagePath);
+        PlanetFactory planetCreator = new PlanetFactory();
+        Planet createdPlanet = planetCreator.createPlanet(name, diameter, surfaceTemp, numberOfMoons, this.imageName);
 
+        if(createdPlanet != null) {
             PlanetIO planetWriter = new PlanetIO();
             planetWriter.WriteToFile(createdPlanet);
-
         }
-    }
-
-    boolean hasValidPlanetContent(String planetName, int planetDiameter, double planetSurfaceTemp, int planetNumberOfMoons) {
-        return PlanetFactory.hasValidAttributes(planetName, planetDiameter,
-                                                    planetSurfaceTemp, planetNumberOfMoons);
     }
 }

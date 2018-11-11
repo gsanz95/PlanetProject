@@ -5,8 +5,8 @@ import javafx.stage.FileChooser;
 import java.io.*;
 import java.nio.file.Paths;
 
-/*
-    Delegate to handle all IO interactions for planets
+/**
+ * Delegate to handle all IO interactions for planets
  */
 public class PlanetIO {
 
@@ -16,6 +16,10 @@ public class PlanetIO {
         this.savePath = Paths.get(".\\planetObjects").toAbsolutePath().normalize().toString();
     }
 
+    /**
+     * Takes a planet and writes it to a file.
+     * @param planetToWrite Planet to be stored in a file
+     */
     public void WriteToFile(Planet planetToWrite) {
         String fileDestination = this.savePath + "\\" + planetToWrite.getName();
         try{
@@ -28,6 +32,11 @@ public class PlanetIO {
         }
     }
 
+    /**
+     * Displays a dialog window and returns the planet
+     * selected.
+     * @return Planet object read from file
+     */
     public Planet choosePlanetFromChooser() {
         FileChooser planetChooser = new FileChooser();
         String planetPath = this.savePath;
@@ -37,8 +46,12 @@ public class PlanetIO {
         return this.ReadFromFile(planetFile.getPath());
     }
 
+    /**
+     * Takes fileLocation and returns the planet read at that location.
+     * @param fileLocation Location of a planet object (absolute path)
+     * @return Planet object read
+     */
     public Planet ReadFromFile(String fileLocation) {
-        //System.err.println(fileLocation);
         try{
             FileInputStream inStream = new FileInputStream(fileLocation);
             ObjectInputStream planetInStream = new ObjectInputStream(inStream);

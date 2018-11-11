@@ -10,8 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-/*
-    Delegate that handles all loading of images
+/**
+ *  Delegate that handles all loading of images
  */
 public class ImageLoader {
 
@@ -20,19 +20,19 @@ public class ImageLoader {
         String imgPath = Paths.get(".\\images").toAbsolutePath().normalize().toString();
         imgChooser.setInitialDirectory(new File(imgPath));
         File selectedImg = imgChooser.showOpenDialog(null);
-
-        return selectedImg.getPath();
+        return selectedImg.getName();
     }
 
-    public static Image getImageFromPath(String pathOfImageToLoad) {
+    public static Image getImageFromName(String imageToLoad) {
+        String imgPath = Paths.get(".\\images").toAbsolutePath().normalize().toString() + "\\" + imageToLoad;
         BufferedImage imgBuffer;
         try {
-            imgBuffer = ImageIO.read(new File(pathOfImageToLoad));
+            imgBuffer = ImageIO.read(new File(imgPath));
             Image img = SwingFXUtils.toFXImage(imgBuffer, null);
             return img;
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Cannot find path: " + pathOfImageToLoad);
+            System.err.println("Cannot find path: " + imgPath);
             return null;
         }
     }

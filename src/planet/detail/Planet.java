@@ -13,22 +13,17 @@ public class Planet implements Serializable {
     private double meanSurfaceTempC;  // Real number -273.15 to 500.0
     private double meanSurfaceTempF;  // Calculate this from meanSurfaceTempC
     private int numberOfMoons; // Integer 0 to 1,000, defaults to -1
-    private String imagePath;
+    private String imageName;
 
     // Constructor
-    public Planet(String name, int diameterKM, double meanSurfaceTempC, int numberOfMoons, String imagePath) {
+    public Planet(String name, int diameterKM, double meanSurfaceTempC, int numberOfMoons, String imageName) {
         this.name = name;
         this.diameterKM = diameterKM;
         this.diameterM = diameterKM * 0.62137119224;
         this.meanSurfaceTempC = meanSurfaceTempC;
         this.meanSurfaceTempF = (meanSurfaceTempC * 9.0/5.0) + 32.0;
         this.numberOfMoons = numberOfMoons;
-        this.imagePath = imagePath;
-    }
-
-    // Setter
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+        this.imageName = imageName;
     }
 
     // Getters
@@ -56,8 +51,8 @@ public class Planet implements Serializable {
         return numberOfMoons;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImageName() {
+        return imageName;
     }
 
     // Validators
@@ -91,6 +86,6 @@ public class Planet implements Serializable {
                 "\nTemp (C): " + this.meanSurfaceTempC +
                 "\nTemp (F): " + this.meanSurfaceTempF +
                 "\nMoons: " + this.numberOfMoons +
-                "\nImage: " + this.imagePath + "\n";
+                "\nImage: " + this.imageName + "\n";
     }
 }
