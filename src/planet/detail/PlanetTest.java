@@ -1,7 +1,16 @@
 package planet.detail;
 
+import javafx.embed.swing.SwingFXUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import javafx.scene.image.Image;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+
 
 public class PlanetTest {
 
@@ -63,7 +72,7 @@ public class PlanetTest {
     }
 
     @Test
-    public void checkTemperatureConversion() {
+    public void temperatureConversionTest() {
         PlanetFactory factory = new PlanetFactory();
         String name = "Neptune";
         int diameter = 49244;
@@ -76,7 +85,7 @@ public class PlanetTest {
     }
 
     @Test
-    public void checkDiameterConversion() {
+    public void diameterConversionTest() {
         PlanetFactory factory = new PlanetFactory();
         String name = "Neptune";
         int diameter = 49244;
@@ -86,5 +95,49 @@ public class PlanetTest {
         double convertedDiameter = 49244 * 0.62137119224;
         Planet planetToCheck = factory.createPlanet(name,diameter,temperature, nrOfMoons, imgPath);
         Assert.assertEquals(convertedDiameter, planetToCheck.getDiameterM(), 0.001D);
+    }
+
+    @Test
+    public void imageImportTest() {
+        String imageToImport = "no_image.png";
+        Image imgToCheck = ImageLoader.getImageFromName(imageToImport);
+
+        Assert.assertNotNull(imgToCheck);
+    }
+
+    @Test
+    public void planetWriteTest() {
+        String name = "Neptune";
+        int diameter = 49244;
+        double temperature= -201.0;
+        int nrOfMoons = 13;
+        String imgPath = "";
+
+        PlanetFactory planetCreator = new PlanetFactory();
+        Planet planetToStore = planetCreator.createPlanet(name, diameter, temperature, nrOfMoons, imgPath);
+
+        PlanetIO planetWriter = new PlanetIO();
+        planetWriter.WriteToFile(planetToStore);
+
+        File storedFile = new File(Paths.get(".\\planetObjects").toAbsolutePath().normalize().toString() + "\\" + planetToStore.getName());
+        Assert.assertNotNull(storedFile);
+    }
+
+    @Test
+    public void planetReadTest() {
+        String name = "Neptune";
+        int diameter = 49244;
+        double temperature= -201.0;
+        int nrOfMoons = 13;
+        String imgPath = "";
+
+        PlanetFactory planetCreator = new PlanetFactory();
+        Planet actualPlanet = planetCreator.createPlanet(name, diameter, temperature, nrOfMoons, imgPath);
+
+        PlanetIO planetReader = new PlanetIO();
+        String readLocation = Paths.get(".\\planetObjects").toAbsolutePath().normalize().toString() + "\\" + name;
+        Planet planetRead = planetReader.ReadFromFile(readLocation);
+
+        Assert.assertEquals(planetRead.toString(), actualPlanet.toString());
     }
 }

@@ -16,7 +16,6 @@ public class TemperatureListener implements ChangeListener<String> {
         this.temperatureF = temperatureF;
     }
 
-
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         try {

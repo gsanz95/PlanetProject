@@ -1,10 +1,7 @@
 package planet.detail;
 
-import java.io.File;
-import java.nio.file.Paths;
-
-/*
-    Creates planets based on information passed into the
+/**
+ *  Creates planets based on information passed into this class
  */
 public class PlanetFactory {
 
@@ -19,7 +16,16 @@ public class PlanetFactory {
         return null;
     }
 
-    public static boolean hasValidAttributes(String planetName, int planetDiameterKM, double planetMeanSurfaceTempC, int planetNumberOfMoons) {
+    /**
+     * Checks all attributes passed on whether they are valid
+     * to be stored as object.
+     * @param planetName
+     * @param planetDiameterKM
+     * @param planetMeanSurfaceTempC
+     * @param planetNumberOfMoons
+     * @return If the attributes are valid
+     */
+    public boolean hasValidAttributes(String planetName, int planetDiameterKM, double planetMeanSurfaceTempC, int planetNumberOfMoons) {
         if(!Planet.isValidName(planetName))
         {
             System.err.println("Invalid name: " + planetName);
